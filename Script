@@ -1,0 +1,66 @@
+import os
+import time
+import random
+
+# Configuration stuff
+NUM_SEARCHES = 60 
+MIN_DELAY = 10
+MAX_DELAY = 15
+
+WORD_BANK = [
+    "science", "history", "technology", "nature", "space", "weather", "recipe",
+    "news", "finance", "health", "travel", "music", "art", "sports", "education",
+    "coding", "gaming", "movies", "books", "diy", "garden", "photo", "cooking",
+    "food", "geography", "psychology", "agriculture", "crypto", "folktales", "energy",
+    "wildlife", "animals", "oceans", "France", "math", "biology", "chemistry",
+    "AI", "philosophy", "transportation", "war", "construction", "architecture", "astronomy",
+    "mythology", "linguistics", "fashion", "comedy", "economics", "law", "paleontology",
+    "fitness", "crafts", "aviation", "anime", "festivals", "geology", "marketing",
+    "business", "sociology", "literature", "automotive", "oceanography", "neuroscience", "anthropology",
+    "parenting", "sustainability", "cybersecurity", "robotics", "nutrition", "woodworking", "metallurgy",
+    "archaeology", "journalism", "politics", "theater", "dance", "sculpture", "astrology",
+    "meteorology", "ecology", "genetics", "zoology", "botany", "dentistry", "nursing",
+    "pharmacology", "medicine", "investing", "banking", "real_estate", "insurance", "management",
+    "leadership", "sales", "hospitality", "tourism", "logistics", "manufacturing", "textiles"
+]
+
+random.shuffle(WORD_BANK)
+PAIRED_QUERIES = [" ".join(WORD_BANK[i:i+2]) for i in range(0, len(WORD_BANK), 2)]
+NUM_SEARCHES = len(PAIRED_QUERIES) # Automatically sets to 51 searches
+
+def generate_query(index):
+    
+    return PAIRED_QUERIES[index]
+
+def run_adb_cmd(cmd):
+    os.system(f"adb shell {cmd}")
+
+def run_automation():
+    print("Waking up the phone screen...")
+    run_adb_cmd("input keyevent KEYCODE_WAKEUP")
+    
+    print("Launching Microsoft Edge")
+   
+    run_adb_cmd("monkey -p com.microsoft.emmx -c android.intent.category.LAUNCHER 1 > /dev/null 2>&1")
+    time.sleep(4) 
+    
+    for i in range(1, NUM_SEARCHES + 1):
+
+        query = generate_query(i - 1)
+        print(f"[{i}/{NUM_SEARCHES}] Phone typing sequence: '{query}'")
+ 
+        run_adb_cmd("input keyevent KEYCODE_SEARCH")
+
+        run_adb_cmd(f"input text '{query}'")
+        time.sleep(1)
+
+        run_adb_cmd("input keyevent KEYCODE_ENTER")
+
+        delay = random.uniform(MIN_DELAY, MAX_DELAY)
+        print(f"Waiting {round(delay, 1)} seconds...")
+        time.sleep(delay)
+
+    print("Completed")
+
+if __name__ == "__main__":
+    run_automation()
