@@ -5,8 +5,10 @@ an automatic search script for the mobile edge browser, this script is designed 
 
 1. Enable Wireless Debugging in phone developer settings
 
-2. in your computer's terminal run (Adb pair) and the type displayed IP and port number in a format like this <IP:Port>
+2. In your computer's terminal run (Adb pair) and the type displayed IP and port number in a format like this <IP:Port>
 
-3. then run (Adb connect) <IP:Port>
+3. Then run (Adb connect) <IP:Port>
 
-4. the script should be run with python3 
+4. The script should be run with python3 
+
+5. you can also create a new file with nano and paste this script into it
